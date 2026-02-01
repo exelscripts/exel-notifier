@@ -7,114 +7,82 @@
 
 <style>
 :root {
-    --bg1: #020617;
-    --bg2: #020617;
-    --card: rgba(15, 23, 42, 0.75);
-    --border: rgba(56, 189, 248, 0.35);
+    --bg: #020617;
+    --card: rgba(15,23,42,.75);
+    --border: rgba(56,189,248,.35);
     --accent: #38bdf8;
-    --accent-soft: #7dd3fc;
     --text: #e5e7eb;
-}
-
-* {
-    box-sizing: border-box;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: system-ui, sans-serif;
     background:
         radial-gradient(circle at top, #0f172a, transparent 60%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
+        linear-gradient(135deg, #020617, #020617);
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--text);
 }
 
-/* CARD */
 .card {
     width: 90%;
     max-width: 480px;
     background: var(--card);
-    border-radius: 18px;
-    padding: 28px;
     border: 1px solid var(--border);
     backdrop-filter: blur(12px);
-    box-shadow:
-        0 0 0 1px rgba(56,189,248,0.1),
-        0 20px 40px rgba(0,0,0,0.6);
-    animation: appear 0.5s ease;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.6);
+    animation: fade 0.5s ease;
 }
 
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fade {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:none; }
 }
 
 h2 {
-    margin: 0 0 14px;
-    font-weight: 600;
+    margin-top: 0;
+    color: #7dd3fc;
     font-size: 1.15em;
-    color: var(--accent-soft);
-}
-
-/* LICENSE INPUT */
-.license-input {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
 }
 
 input {
     width: 100%;
-    padding: 10px 12px;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 10px;
     border-radius: 10px;
-    background: rgba(2, 6, 23, 0.8);
+    background: rgba(2,6,23,.8);
     border: 1px solid var(--border);
     color: var(--text);
-    outline: none;
-    font-size: 0.95em;
     text-align: center;
 }
 
-input::placeholder {
-    color: #94a3b8;
-}
-
-/* BUTTONS */
 button {
-    margin-top: 14px;
     width: 100%;
+    margin-top: 14px;
     padding: 11px;
     border-radius: 10px;
-    background: linear-gradient(135deg, #38bdf8, #60a5fa);
     border: none;
+    background: linear-gradient(135deg,#38bdf8,#60a5fa);
     color: #020617;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 20px rgba(56,189,248,0.45);
+    box-shadow: 0 0 18px rgba(56,189,248,.45);
 }
 
-/* COPY BOX */
 .copy-box {
     margin-top: 16px;
     display: flex;
-    align-items: center;
     gap: 10px;
-    background: rgba(2,6,23,0.75);
+    background: rgba(2,6,23,.75);
     border: 1px solid var(--border);
     padding: 12px;
     border-radius: 12px;
@@ -122,109 +90,111 @@ button:hover {
 
 .copy-box span {
     flex: 1;
-    font-size: 0.8em;
-    color: var(--accent-soft);
+    font-size: .8em;
+    color: #7dd3fc;
     word-break: break-all;
 }
 
 .copy-box button {
     width: auto;
     padding: 8px 12px;
-    font-size: 0.85em;
 }
 
-/* ERROR */
+.dashboard {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(2,6,23,.75);
+    border: 1px solid var(--border);
+    font-size: .9em;
+}
+
 .error {
     margin-top: 10px;
-    font-size: 0.85em;
     color: #fca5a5;
-}
-
-/* LOGOUT */
-.logout {
-    margin-top: 18px;
-    background: transparent;
-    border: 1px solid rgba(248,113,113,0.5);
-    color: #fecaca;
-}
-
-.logout:hover {
-    box-shadow: 0 0 15px rgba(248,113,113,0.35);
+    font-size: .85em;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LICENSE -->
-<div class="card" id="licenseCard">
+<div class="card" id="login">
     <h2>Enter License Key</h2>
-
-    <div class="license-input">
-        <input id="licenseInput" placeholder="EXEL-XXXX-XXXX-XXXX">
-    </div>
-
-    <button onclick="checkLicense()">Unlock</button>
-    <div class="error" id="errorText"></div>
+    <input id="keyInput" placeholder="EXEL-XH-XXXX-XXXX">
+    <button onclick="activate()">Unlock</button>
+    <div class="error" id="error"></div>
 </div>
 
-<!-- CONTENT -->
-<div class="card" id="contentCard" style="display:none;">
+<div class="card" id="app" style="display:none;">
     <h2>exel hub finder paid, find brainrots INSTANTLY ⚡⏩</h2>
+
+    <div class="dashboard">
+        ⏳ Time remaining: <b id="timeLeft">--:--:--</b>
+    </div>
 
     <div class="copy-box">
         <span>
 loadstring(game:HttpGet("https://raw.githubusercontent.com/exelscripts/joiner/refs/heads/main/exel"))()
         </span>
-        <button onclick="copyAny(this)">Copy</button>
+        <button onclick="copy(this)">Copy</button>
     </div>
 
-    <button class="logout" onclick="logout()">Logout</button>
+    <button style="margin-top:18px;background:#ef4444;" onclick="logout()">Logout</button>
 </div>
 
 <script>
-const validKeys = [
-"EXEL-4A9Q-Z7M1-D8PC","EXEL-Q8M1-7Z9A-PD4C","EXEL-91ZQ-A7M8-DP4C",
-"EXEL-ZM7A-Q9P1-84DC","EXEL-7Q1M-AZ9P-D84C","EXEL-P9Z8-QA7M-1D4C",
-"EXEL-A1MZ-7Q9P-D84C","EXEL-QZ9A-1M7P-D84C","EXEL-8M1Q-ZA7P-D94C",
-"EXEL-7PZQ-9A1M-D84C","EXEL-ZQ1A-7M9P-D84C","EXEL-9MZQ-A7P1-D84C",
-"EXEL-Q7ZP-1A9M-D84C","EXEL-A9Q7-MZP1-D84C","EXEL-1ZQ9-A7MP-D84C",
-"EXEL-QP7Z-91AM-D84C","EXEL-7A9M-QZP1-D84C","EXEL-ZP1Q-A9M7-D84C",
-"EXEL-9Q7A-ZMP1-D84C","EXEL-MQZ7-A9P1-D84C"
-];
+const keys = {
+"EXEL-1H-A9Q7-MP2D":3600,"EXEL-1H-Z7Q1-A8MD":3600,"EXEL-1H-QA91-Z7MD":3600,
+"EXEL-1H-7AQP-Z91D":3600,"EXEL-1H-M9ZQ-A71D":3600,
 
-function checkLicense() {
-    const key = licenseInput.value.trim().toUpperCase();
-    if (!validKeys.includes(key)) {
-        errorText.innerText = "Invalid license key";
-        return;
-    }
-    localStorage.setItem("license", key);
-    showContent();
+"EXEL-2H-AQ91-ZMD7":7200,"EXEL-2H-ZM7A-Q91D":7200,"EXEL-2H-Q7A9-ZM1D":7200,
+"EXEL-2H-9ZAM-Q71D":7200,"EXEL-2H-MA91-ZQ7D":7200,
+
+"EXEL-3H-QA9Z-M71D":10800,"EXEL-3H-ZA7M-Q91D":10800,"EXEL-3H-91QZ-AM7D":10800,
+"EXEL-3H-M7AQ-Z91D":10800,"EXEL-3H-AZQM-971D":10800,
+
+"EXEL-4H-ZQ91-AM7D":14400,"EXEL-4H-A7MZ-Q91D":14400,"EXEL-4H-Q9AM-Z71D":14400,
+"EXEL-4H-MZ7A-Q91D":14400,"EXEL-4H-91AZ-QM7D":14400
+};
+
+function activate() {
+    const k = keyInput.value.trim().toUpperCase();
+    if (!keys[k]) return error.textContent = "Invalid key";
+    localStorage.setItem("key", k);
+    localStorage.setItem("start", Date.now());
+    show();
 }
 
-function showContent() {
-    licenseCard.style.display = "none";
-    contentCard.style.display = "block";
+function show() {
+    login.style.display="none";
+    app.style.display="block";
+    tick();
+}
+
+function tick() {
+    const start = +localStorage.getItem("start");
+    const dur = keys[localStorage.getItem("key")];
+    const left = dur - Math.floor((Date.now()-start)/1000);
+    if (left <= 0) return logout();
+    timeLeft.textContent =
+        new Date(left*1000).toISOString().substr(11,8);
+    setTimeout(tick,1000);
 }
 
 function logout() {
-    localStorage.removeItem("license");
+    localStorage.clear();
     location.reload();
 }
 
-function copyAny(btn) {
-    const text = btn.previousElementSibling.innerText;
-    navigator.clipboard.writeText(text);
-    btn.innerText = "Copied";
-    setTimeout(() => btn.innerText = "Copy", 1500);
+function copy(b){
+    navigator.clipboard.writeText(b.previousElementSibling.innerText);
+    b.textContent="Copied";
+    setTimeout(()=>b.textContent="Copy",1200);
 }
 
-if (localStorage.getItem("license")) {
-    showContent();
-}
+if(localStorage.getItem("key")) show();
 </script>
 
 </body>
 </html>
-
